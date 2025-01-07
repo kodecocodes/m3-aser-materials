@@ -32,37 +32,35 @@
 
 import Foundation
 
-
-
 enum NetworkError: Error, LocalizedError, Identifiable {
-    case invalidURL
-    case noData
-    case decodingFailed
-    case unexpectedStatusCode(Int)
-
-    // Identifiable conformance
-    var id: String {
-        switch self {
-        case .invalidURL: return "invalidURL"
-        case .noData: return "noData"
-        case .decodingFailed: return "decodingFailed"
-        case .unexpectedStatusCode(let code): return "unexpectedStatusCode_\(code)"
-        }
+  case invalidURL
+  case noData
+  case decodingFailed
+  case unexpectedStatusCode(Int)
+  
+  // Identifiable conformance
+  var id: String {
+    switch self {
+    case .invalidURL: return "invalidURL"
+    case .noData: return "noData"
+    case .decodingFailed: return "decodingFailed"
+    case .unexpectedStatusCode(let code): return "unexpectedStatusCode_\(code)"
     }
-
-    // LocalizedError conformance
-    var errorDescription: String? {
-        switch self {
-        case .invalidURL:
-            return "The URL provided is invalid."
-        case .noData:
-            return "No data was received from the server."
-        case .decodingFailed:
-            return "Failed to decode the response."
-        case .unexpectedStatusCode(let code):
-            return "Unexpected status code: \(code)."
-        }
+  }
+  
+  // LocalizedError conformance
+  var errorDescription: String? {
+    switch self {
+    case .invalidURL:
+      return "The URL provided is invalid."
+    case .noData:
+      return "No data was received from the server."
+    case .decodingFailed:
+      return "Failed to decode the response."
+    case .unexpectedStatusCode(let code):
+      return "Unexpected status code: \(code)."
     }
+  }  
 }
 
 protocol NetworkService {

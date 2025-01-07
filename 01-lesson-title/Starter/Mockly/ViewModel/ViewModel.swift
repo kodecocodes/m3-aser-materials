@@ -34,15 +34,15 @@ import Foundation
 
 @MainActor
 class UsersViewModel: ObservableObject {
-    @Published var users: [User] = []
-
-    private let networkService: NetworkService
-
-    init(networkService: NetworkService) {
-        self.networkService = networkService
-    }
-
-    func loadUsers() async {
-        users = (try? await networkService.fetchUsers()) ?? []
-    }
+  @Published var users: [User] = []
+  
+  private let networkService: NetworkService
+  
+  init(networkService: NetworkService) {
+    self.networkService = networkService
+  }
+  
+  func loadUsers() async {
+    users = (try? await networkService.fetchUsers()) ?? []
+  }  
 }

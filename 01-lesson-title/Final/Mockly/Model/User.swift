@@ -32,20 +32,18 @@
 
 import Foundation
 
-import Foundation
-
 struct User: Decodable, Identifiable {
-    let id: Int
+  let id: Int
+  let name: String
+  let email: String
+  let address: Address
+  let company: Company
+  
+  struct Address: Decodable {
+    let city: String
+  }
+  
+  struct Company: Decodable {
     let name: String
-    let email: String
-    let address: Address
-    let company: Company
-
-    struct Address: Decodable {
-        let city: String
-    }
-
-    struct Company: Decodable {
-        let name: String
-    }
+  }  
 }

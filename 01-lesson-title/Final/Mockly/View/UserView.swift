@@ -33,36 +33,36 @@
 import SwiftUI
 
 struct UsersView: View {
-    @StateObject private var viewModel: UsersViewModel
-
-    init(networkService: NetworkService) {
-        _viewModel = StateObject(wrappedValue: UsersViewModel(networkService: networkService))
-    }
-
-    var body: some View {
-        NavigationView {
-            List(viewModel.users) { user in
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(user.name).font(.headline)
-                    Text("Email: \(user.email)").font(.subheadline)
-                    Text("City: \(user.address.city)").font(.subheadline)
-                    Text("Company: \(user.company.name)").font(.subheadline)
-                }
-                .padding(.vertical, 8)
-            }
-            .navigationTitle("Users")
-            .onAppear {
-                Task {
-                    await viewModel.loadUsers()
-                }
-            }
-            .alert(item: $viewModel.networkError) { error in
-                Alert(
-                    title: Text("Error"),
-                    message: Text(error.errorDescription ?? "An unknown error occurred."),
-                    dismissButton: .default(Text("OK"))
-                )
-            }
+  @StateObject private var viewModel: UsersViewModel
+  
+  init(networkService: NetworkService) {
+    _viewModel = StateObject(wrappedValue: UsersViewModel(networkService: networkService))
+  }
+  
+  var body: some View {
+    NavigationView {
+      List(viewModel.users) { user in
+        VStack(alignment: .leading, spacing: 8) {
+          Text(user.name).font(.headline)
+          Text("Email: \(user.email)").font(.subheadline)
+          Text("City: \(user.address.city)").font(.subheadline)
+          Text("Company: \(user.company.name)").font(.subheadline)
         }
+        .padding(.vertical, 8)
+      }
+      .navigationTitle("Users")
+      .onAppear {
+        Task {
+          await viewModel.loadUsers()
+        }
+      }
+      .alert(item: $viewModel.networkError) { error in
+        Alert(
+          title: Text("Error"),
+          message: Text(error.errorDescription ?? "An unknown error occurred."),
+          dismissButton: .default(Text("OK"))
+        )
+      }
     }
+  }  
 }

@@ -34,9 +34,9 @@ import SwiftUI
 
 @main
 struct MocklyApp: App {
-    var body: some Scene {
-        WindowGroup {
-            UsersView(networkService: DefaultNetworkManager())
-        }
+  var body: some Scene {
+    WindowGroup {
+      UsersView(networkService: DefaultNetworkManager())
     }
+  }  
 }

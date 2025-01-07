@@ -33,13 +33,13 @@
 import Foundation
 
 protocol NetworkService {
-    func fetchUsers() async throws -> [User]
+  func fetchUsers() async throws -> [User]
 }
 
 class DefaultNetworkManager: NetworkService {
-    func fetchUsers() async -> [User] {
-        let url = URL(string: "https://jsonplaceholder.typicode.com/users")!
-        let (data, _) = try! await URLSession.shared.data(from: url) // Forced unwrapping
-        return try! JSONDecoder().decode([User].self, from: data)    // Forced unwrapping
-    }
+  func fetchUsers() async -> [User] {
+    let url = URL(string: "https://jsonplaceholder.typicode.com/users")!
+    let (data, _) = try! await URLSession.shared.data(from: url) // Forced unwrapping
+    return try! JSONDecoder().decode([User].self, from: data)    // Forced unwrapping
+  }
 }

@@ -34,22 +34,22 @@ import Foundation
 
 @MainActor
 class UsersViewModel: ObservableObject {
-    @Published var users: [User] = []
-    @Published var networkError: NetworkError? // Use NetworkError as the alert item
-
-    private let networkService: NetworkService
-
-    init(networkService: NetworkService) {
-        self.networkService = networkService
+  @Published var users: [User] = []
+  @Published var networkError: NetworkError? // Use NetworkError as the alert item
+  
+  private let networkService: NetworkService
+  
+  init(networkService: NetworkService) {
+    self.networkService = networkService
+  }
+  
+  func loadUsers() async {
+    do {
+      users = try await networkService.fetchUsers()
+    } catch let error as NetworkError {
+      networkError = error // Assign the error to trigger the alert
+    } catch {
+      networkError = .decodingFailed // Handle other unexpected errors
     }
-
-    func loadUsers() async {
-        do {
-            users = try await networkService.fetchUsers()
-        } catch let error as NetworkError {
-            networkError = error // Assign the error to trigger the alert
-        } catch {
-            networkError = .decodingFailed // Handle other unexpected errors
-        }
-    }
+  }  
 }
