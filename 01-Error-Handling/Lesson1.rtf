@@ -1,0 +1,200 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2821
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\froman\fcharset0 Times-Bold;\f1\froman\fcharset0 Times-Roman;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww25380\viewh13180\viewkind0
+\deftab720
+\pard\pardeftab720\sa321\partightenfactor0
+
+\f0\b\fs36 \cf0 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2  Lesson 1: Error Handling in Swift\
+Introduction\
+
+\f1\b0 This lesson introduces error handling in Swift using the **Mockly** app as an example. We will explore how the `Error` protocol and enums allow us to define a fixed set of error cases, enabling robust error handling. By the end of this lesson, you will understand how to handle different types of errors and prevent crashes in real-world applications.
+\f0\b \
+Lesson Objectives\
+
+\f1\b0 By the end of this lesson, you will be able to:\
+- Explain how adopting the `Error` protocol, especially with enums, can be used to represent errors in Swift.\
+- Describe how errors can be handled or propagated to the calling function.\
+- Implement error handling in the Mockly app by improving the existing network service.
+\f0\b \
+\
+1. Getting Started\
+What is Error Handling?\
+
+\f1\b0 Error handling is the process of detecting and responding to errors that occur during execution. Proper error handling:\
+- Prevents app crashes by handling unexpected situations.\
+- Provides meaningful feedback to the user.\
+- Ensures a smooth and resilient application experience.
+\f0\b \
+
+\f1\b0 In Swift, errors are represented using types that conform to the `Error` protocol. The most common way to define errors is by using **enums**, as they allow us to define a fixed set of possible error cases.
+\f0\b \
+Example:\
+
+\f1\b0 enum APIError: Error \{\
+    case networkFailure\
+    case invalidURL\
+\}
+\f0\b \
+Error Handling Techniques in Swift\
+Swift provides the following mechanisms to handle errors:\
+1. Throwing Errors (throws)\
+
+\f1\b0 A function can indicate that it may throw an error by using the \'91throws\'92 keyword. Inside the function, the \'91throw\'92 keyword is used to trigger an error.
+\f0\b \
+\
+Example:\
+
+\f1\b0 func fetchData() throws -> String \{\
+    let success = false\
+    if !success \{\
+        throw APIError.networkFailure\
+    \}\
+    return "Data fetched successfully"\
+\}
+\f0\b \
+\
+\
+#### 2. Handling Errors with `do-catch`\
+When calling a function that throws an error, we need to handle it using a `do-catch` block.\
+\
+**Example:**\
+```swift\
+do \{\
+    let data = try fetchData()\
+    print(data)\
+\} catch APIError.networkFailure \{\
+    print("Network failure occurred. Please try again.")\
+\} catch \{\
+    print("An unexpected error occurred: \\(error)")\
+\}\
+3. Propagating Errors\
+
+\f1\b0 Errors can be propagated up the call stack by marking a function with \'91throws\'92 and letting its caller handle the error.
+\f0\b \
+\
+Example:\
+
+\f1\b0 func loadData() throws -> String \{\
+    return try fetchData()\
+\}\
+do \{\
+    let result = try loadData()\
+    print(result)\
+\} catch \{\
+    print("Error loading data: \\(error)")\
+\}
+\f0\b \
+\
+\
+ 4. Optional Handling (\'91try?\'92 and \'91try!\'92)\
+
+\f1\b0 Instead of using \'91do-catch\'92, we can use \'91try?\'92 to convert an error into \'91nil\'92, or \'91try!\'92 to force execution (which will crash if an error occurs).
+\f0\b \
+\
+Example using \'91try?\'92:\
+
+\f1\b0 let result = try? fetchData()\
+print(result ?? "Failed to fetch data")
+\f0\b \
+Example \
+
+\f1\b0 using \'91try!\'92 (not recommended unless you are sure there will be no error):
+\f0\b \
+
+\f1\b0 let result = try! fetchData()\
+print(result)
+\f0\b \
+
+\f1\b0 Now that we understand these error handling techniques, let's apply them to the Mockly app.
+\f0\b \
+\
+2. Understanding the Starter Mockly App and Its Issues\
+\
+
+\f1\b0 The \'91Starter\'92 version of the Mockly app fetches a list of users from an API. However, it does not handle errors effectively, leading to potential issues.\
+
+\f0\b \
+Starter Code (UsersViewModel):\
+\
+
+\f1\b0 @MainActor\
+class UsersViewModel: ObservableObject \{\
+    @Published var users: [User] = []\
+    private let networkService: NetworkService\
+    init(networkService: NetworkService) \{\
+        self.networkService = networkService\
+    \}\
+    func loadUsers() async \{\
+        users = (try? await networkService.fetchUsers()) ?? []\
+    \}\
+\}
+\f0\b \
+\
+Issues in Starter Code:\
+
+\f1\b0 1. Forced Unwrapping (\'91try!\'92) \'96 Crashes the app if an error occurs.\
+2. No Error Feedback \'96 Users won\'92t know why the data failed to load.\
+3. Silent Failure (\'91try?\'92) \'96 Simply assigns an empty array if an error occurs, hiding the problem.\
+4. Lack of Error Propagation \'96 Errors are not passed to higher layers, making debugging difficult.
+\f0\b \
+\
+
+\f1\b0 To solve these problems, we will introduce structured error handling using custom error types.
+\f0\b \
+\
+3. Defining Custom Errors with the \'91Error\'92 Protocol\
+\
+
+\f1\b0 In Swift, we define custom error types using the \'91Error\'92 protocol. Since different failure scenarios exist in network calls, we will create a \'91
+\f0\b NetworkError
+\f1\b0 \'92 enum with cases representing common failures.
+\f0\b \
+Updated NetworkError Enum:\
+\
+
+\f1\b0 enum NetworkError: Error, LocalizedError, Identifiable \{\
+    case invalidURL\
+    case noData\
+    case decodingFailed\
+    case unexpectedStatusCode(Int)\
+    var id: String \{\
+        switch self \{\
+        case .invalidURL: return "invalidURL"\
+        case .noData: return "noData"\
+        case .decodingFailed: return "decodingFailed"\
+        case .unexpectedStatusCode(let code): return "unexpectedStatusCode_\\(code)"\
+        \}\
+    \}
+\f0\b \
+\
+
+\f1\b0     var errorDescription: String? \{\
+        switch self \{\
+        case .invalidURL: return "The URL provided is invalid."\
+        case .noData: return "No data was received from the server."\
+        case .decodingFailed: return "Failed to decode the response."\
+        case .unexpectedStatusCode(let code): return "Unexpected status code: \\(code)."\
+        \}\
+    \}\
+\}
+\f0\b \
+\
+Conclusion\
+
+\f1\b0 Error handling is crucial in modern app development to ensure smooth user experience and prevent application crashes. By structuring errors using the `Error` protocol and handling them using techniques like `do-catch`, `throws`, and error propagation, we can make our applications more resilient and debuggable. \
+\
+In this lesson, we:\
+- Identified issues in the Starter Mockly app and improved its error-handling mechanisms.\
+- Defined a custom NetworkError enum to handle network failures effectively.\
+- Implemented structured error handling using \'91do-catch\'92 and error propagation.\
+- Used SwiftUI\'92s alert system to provide meaningful feedback to the user.\
+\
+By integrating these practices, we ensure that our applications are not only functional but also user-friendly and reliable. Moving forward, we can build upon these concepts to handle more complex error scenarios, such as retry mechanisms and logging for debugging purposes.
+\f0\b \
+\
+\
+\
+}
