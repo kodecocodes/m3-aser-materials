@@ -43,8 +43,8 @@ class Pastry {
 }
 
 enum BakeryError: Error {
-  case tooFew(numberOnHand: Int), doNotSell, wrongFlavor
-  case inventory, noPower
+  case tooFew(numberOnHand: Int), noSuchItem, wrongFlavor
+  case noInventory, noPower
 }
 
 class Bakery {
@@ -57,14 +57,14 @@ class Bakery {
   
   func open(_ shouldOpen: Bool = Bool.random()) throws -> Bool {
     guard shouldOpen else {
-      throw Bool.random() ? BakeryError.inventory : BakeryError.noPower
+      throw Bool.random() ? BakeryError.noInventory : BakeryError.noPower
     }
     return shouldOpen
   }
     
   func orderPastry(item: String, amountRequested: Int, flavor: String) throws -> Int {
     guard let pastry = itemsForSale[item] else {
-      throw BakeryError.doNotSell
+      throw BakeryError.noSuchItem
     }
     guard flavor == pastry.flavor else {
       throw BakeryError.wrongFlavor
@@ -73,7 +73,7 @@ class Bakery {
       throw BakeryError.tooFew(numberOnHand: pastry.numberOnHand)
     }
     pastry.numberOnHand -= amountRequested
-        
+
     return pastry.numberOnHand
   }
 }
@@ -87,14 +87,14 @@ do {
 // Handle each BakeryError
 catch let error as BakeryError {
   switch error {
-  case .inventory, .noPower:
+  case .noInventory, .noPower:
     print("Sorry, the bakery is now closed.")
-  case .doNotSell:
+  case .noSuchItem:
     print("Sorry, but we don't sell this item.")
   case .wrongFlavor:
     print("Sorry, but we don't carry this flavor.")
   case .tooFew(numberOnHand: let items):
-    print("We only have \(items) cookies left.")
+    print("We only have \(items) of that item.")
   }
 }
 // Handle unexpected errors
@@ -107,14 +107,14 @@ do {
   try bakery.orderPastry(item: "Albatross", amountRequested: 1, flavor: "AlbatrossFlavor")
 }
 // Another way to handle every error
-catch BakeryError.inventory, BakeryError.noPower {
+catch BakeryError.noInventory, BakeryError.noPower {
   print("Sorry, the bakery is now closed.")
-} catch BakeryError.doNotSell {
+} catch BakeryError.noSuchItem {
   print("Sorry, but we don't sell this item.")
 } catch BakeryError.wrongFlavor {
   print("Sorry, but we don't carry this flavor.")
 } catch BakeryError.tooFew(numberOnHand: let items) {
-  print("Sorry, we only have \(items) cookies left.")
+  print("Sorry, we only have \(items) of that item.") 
 } catch {
   print("Some other error.")
 }

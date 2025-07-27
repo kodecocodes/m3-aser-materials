@@ -56,8 +56,8 @@ struct PetHouse {
   }
 }
 
-let nopeHouse = PetHouse(squareFeetAsString: "nope")
 let house = PetHouse(squareFeetAsString: "100")
+let nopeHouse = PetHouse(squareFeetAsString: "nope")
 
 
 // Optional chaining
