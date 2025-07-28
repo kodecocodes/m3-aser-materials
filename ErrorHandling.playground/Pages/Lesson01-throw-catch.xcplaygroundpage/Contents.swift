@@ -114,7 +114,7 @@ catch BakeryError.noInventory, BakeryError.noPower {
 } catch BakeryError.wrongFlavor {
   print("Sorry, but we don't carry this flavor.")
 } catch BakeryError.tooFew(numberOnHand: let items) {
-  print("Sorry, we only have \(items) of that item.") 
+  print("We only have \(items) of that item.")
 } catch {
   print("Some other error.")
 }

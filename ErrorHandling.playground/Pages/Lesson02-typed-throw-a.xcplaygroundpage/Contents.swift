@@ -43,8 +43,8 @@ class Pastry {
 }
 
 enum BakeryError: Error {
-  case tooFew(numberOnHand: Int), doNotSell, wrongFlavor
-  case inventory, noPower
+  case tooFew(numberOnHand: Int), noSuchItem, wrongFlavor
+  case noInventory, noPower
 }
 
 class Bakery {
@@ -59,7 +59,7 @@ class Bakery {
   // Method throws only BakeryError
   func open(_ shouldOpen: Bool = Bool.random()) throws(BakeryError) -> Bool {
     guard shouldOpen else {
-      throw Bool.random() ? BakeryError.inventory : BakeryError.noPower
+      throw Bool.random() ? .noInventory : .noPower
     }
     return shouldOpen
   }
@@ -67,13 +67,13 @@ class Bakery {
   // Method throws only BakeryError
   func orderPastry(item: String, amountRequested: Int, flavor: String) throws(BakeryError) -> Int {
     guard let pastry = itemsForSale[item] else {
-      throw BakeryError.doNotSell
+      throw .noSuchItem
     }
     guard flavor == pastry.flavor else {
-      throw BakeryError.wrongFlavor
+      throw .wrongFlavor
     }
     guard amountRequested <= pastry.numberOnHand else {
-      throw BakeryError.tooFew(numberOnHand: pastry.numberOnHand)
+      throw .tooFew(numberOnHand: pastry.numberOnHand)
     }
     pastry.numberOnHand -= amountRequested
         
@@ -91,9 +91,9 @@ do {
 // Handle each BakeryError
 catch let error {
   switch error {
-  case .inventory, .noPower:
+  case .noInventory, .noPower:
     print("Sorry, the bakery is now closed.")
-  case .doNotSell:
+  case .noSuchItem:
     print("Sorry, but we don't sell this item.")
   case .wrongFlavor:
     print("Sorry, but we don't carry this flavor.")
@@ -101,20 +101,24 @@ catch let error {
     print("We only have \(items) cookies left.")
   }
 }
+// No other type of error is possible, so compiler warns "Case will never be executed"
+//catch {
+//  print("Something went wrong: \(error)")
+//}
 
 do {
   try bakery.open()
   try bakery.orderPastry(item: "Albatross", amountRequested: 1, flavor: "AlbatrossFlavor")
 }
 // Another way to handle every error
-catch .inventory, .noPower {
+catch .noInventory, .noPower {
   print("Sorry, the bakery is now closed.")
-} catch .doNotSell {
+} catch .noSuchItem {
   print("Sorry, but we don't sell this item.")
 } catch .wrongFlavor {
   print("Sorry, but we don't carry this flavor.")
-} catch .tooFew {
-  print("Sorry, we don't have enough items to fulfill your order.")
+} catch .tooFew(numberOnHand: let items) {
+  print("We only have \(items) cookies left.")
 // No other type of error is possible, so compiler warns "Case will never be executed"
 //} catch {
 //  print("Some other error.")
