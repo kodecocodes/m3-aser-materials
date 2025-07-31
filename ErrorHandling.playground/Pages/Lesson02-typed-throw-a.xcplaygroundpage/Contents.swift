@@ -89,7 +89,7 @@ do {
   try bakery.orderPastry(item: "Cookie", amountRequested: 1, flavor: "ChocolateChip")
 }
 // Handle each BakeryError
-catch let error {
+catch let error {  // error is type BakeryError
   switch error {
   case .noInventory, .noPower:
     print("Sorry, the bakery is now closed.")

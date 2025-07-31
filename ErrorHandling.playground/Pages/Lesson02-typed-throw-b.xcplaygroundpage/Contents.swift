@@ -63,10 +63,16 @@ do {
   print("An unexpected error occurred.")
 }
 
-func loadFeed() throws { }  // equivalent to func loadFeed() throws(any Error)
+// Not allowed: function can throw at most one Error type
+//func loadData() throws(NetworkError, AuthError) {  // Consecutive statements on a line...
+func loadData() throws {
+  // networking code can throw NetworkError
+  // authentication code can throw AuthError
+}
 
+// Fall back to untyped throw
 do {
-  try loadFeed()
+  try loadData()
 }
 catch let authError as AuthError {
   print("auth error", authError)
@@ -87,8 +93,7 @@ catch {
   print("error", error)
 }
 
-// Not allowed: func loadFeed() throws(AuthError, NetworkError)
-
+// Combine Error types
 enum FeedError: Error {
   case authError(AuthError)
   case networkError(NetworkError)
@@ -96,17 +101,17 @@ enum FeedError: Error {
   // case other(any Error)
 }
 
-func loadFeed2() throws(FeedError) { }
+func loadData2() throws(FeedError) { }
 
 do {
-  try loadFeed2()
+  try loadData2()
 }
 catch {
   switch error {
-    case .authError(let authError):
-      // handle auth error
-    case .networkError(let networkError):
-      // handle network error
+  case .authError(let authError):
+    // handle auth error
+  case .networkError(let networkError):
+    // handle network error
   }
 }
 
@@ -115,7 +120,7 @@ func cacheFeed() throws { }
 // Two methods might throw different error types so the compiler must drop down to any Error
 // since both methods throw something that conforms to Error
 do {
-  try loadFeed2()
+  try loadData2()
   try cacheFeed()
 } catch {
   // error is any Error here
