@@ -34,20 +34,32 @@
 
 import Foundation
 
-// Simple use of Result
 enum EvenNumberError: Error {
   case emptyArray
 }
 
+// throwing function
+func evenNumbersThrow(in collection: [Int]) throws(EvenNumberError) -> [Int] {
+  guard !collection.isEmpty else { throw .emptyArray }
+  let evenNumbers = collection.filter { number in number % 2 == 0 }
+  if evenNumbers.isEmpty {
+    throw .emptyArray
+  } else {
+    return evenNumbers
+  }
+}
+
+// Simple use of Result
+// function that returns Result type
 func evenNumbers(in collection: [Int]) -> Result<[Int], EvenNumberError> {
   guard !collection.isEmpty else {
-    return .failure(EvenNumberError.emptyArray)
+    return .failure(.emptyArray)
   }
   
   let evenNumbers = collection.filter { number in number % 2 == 0 }
   
   if evenNumbers.isEmpty {
-    return .failure(EvenNumberError.emptyArray)
+    return .failure(.emptyArray)
   } else {
     return .success(evenNumbers)
   }
@@ -77,7 +89,7 @@ func fetchReadings() async {
     let output = "Error: \(error.localizedDescription)"
   }
 
-  // or switch
+  // switch on result
   switch result {
   case .success(let str):
     let output = str

@@ -45,7 +45,9 @@ enum DataFetchError: Error {
 // Define a Result type for fetching data
 typealias FetchResult = Result<Data, DataFetchError>
 
-func fetchData(from urlString: String, completion: @escaping @Sendable (FetchResult) -> Void) {
+func fetchData(
+  from urlString: String,
+  completion: @escaping @Sendable (FetchResult) -> Void) {
   guard let url = URL(string: urlString) else {
     completion(.failure(.networkFailure))
     return
@@ -86,7 +88,8 @@ enum JSONError: Error {
 }
 
 // Function returns a dictionary on success or an error on failure
-func loadJSON(fromURL urlString: String) -> Result<[String: Any], JSONError> {
+func loadJSON(
+  fromURL urlString: String) -> Result<[String: Any], JSONError> {
   guard let url = URL(string: urlString) else {
     return .failure(.invalidURL)
   }
@@ -127,11 +130,10 @@ enum EntropyError: Error {
   case entropyDepleted
 }
 
-let queue = DispatchQueue(label: "com.example.queue")
-
 struct AsyncRandomGenerator {
   static let entropyLimit = 5
   var count = 0
+  let queue = DispatchQueue(label: "com.example.queue")
 
   mutating func fetchRemoteRandomNumber(
     completion: @escaping @Sendable (Result<Int, EntropyError>) -> Void

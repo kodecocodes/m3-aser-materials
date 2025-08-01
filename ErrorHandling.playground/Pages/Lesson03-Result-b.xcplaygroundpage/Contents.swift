@@ -48,8 +48,8 @@ class Pastry {
 }
 
 enum BakeryError: Error {
-  case tooFew(numberOnHand: Int), doNotSell, wrongFlavor
-  case inventory, noPower
+  case tooFew(numberOnHand: Int), noSuchItem, wrongFlavor
+  case noInventory, noPower
 }
 
 class Bakery {
@@ -62,7 +62,7 @@ class Bakery {
 
   func orderPastry(item: String, amountRequested: Int, flavor: String) throws -> Int {
     guard let pastry = itemsForSale[item] else {
-      throw BakeryError.doNotSell
+      throw BakeryError.noSuchItem
     }
     guard flavor == pastry.flavor else {
       throw BakeryError.wrongFlavor
@@ -77,13 +77,17 @@ class Bakery {
 }
 
 let bakery = Bakery()
-
 var results = [Result<Int, Error>]()
+
 for (key, value) in bakery.itemsForSale {
   // Invoke throwing expression in closure passed to init(catching:)
-  let result = Result { try bakery.orderPastry(item: key, amountRequested: 1, flavor: value.flavor) }
+  let result = Result {
+    try bakery.orderPastry(
+      item: key,
+      amountRequested: 1,
+      flavor: value.flavor)
+  }
   results.append(result)
 }
-results
 
 //: [Next](@next)
