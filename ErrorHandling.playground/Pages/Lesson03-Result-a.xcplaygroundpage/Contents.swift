@@ -49,8 +49,7 @@ func evenNumbersThrow(in collection: [Int]) throws(EvenNumberError) -> [Int] {
   }
 }
 
-// Simple use of Result
-// function that returns Result type
+// Basic use of Result: Function that returns Result type
 func evenNumbers(in collection: [Int]) -> Result<[Int], EvenNumberError> {
   guard !collection.isEmpty else {
     return .failure(.emptyArray)
@@ -65,12 +64,25 @@ func evenNumbers(in collection: [Int]) -> Result<[Int], EvenNumberError> {
   }
 }
 
+let emptyArray = [Int]()
 let numbers: [Int] = [2,3,6,8,10]
 let oddNumbers: [Int] = [1,3,5]
-let emptyArray = [Int]()
 
-print(evenNumbers(in: numbers))
-print(evenNumbers(in: oddNumbers))
+let result = evenNumbers(in: oddNumbers)
+
+switch result {
+case .success(let array):
+  print(array)
+case .failure(let error):
+  print("Array is empty")
+}
+
+do {
+  let array = try result.get()
+  print(array)
+} catch {
+  print(error)
+}
 
 // Paul Hudson: Task.result
 func fetchReadings() async {
@@ -82,7 +94,7 @@ func fetchReadings() async {
   }
   let result = await fetchTask.result  // Note: don't need try
 
-  // read result
+  // try result.get()
   do {
     let output = try result.get()
   } catch {
