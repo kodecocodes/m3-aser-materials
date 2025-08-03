@@ -76,6 +76,7 @@ class Bakery {
   }
 }
 
+// Use Result initializer init(catching:)
 let bakery = Bakery()
 var results = [Result<Int, Error>]()
 

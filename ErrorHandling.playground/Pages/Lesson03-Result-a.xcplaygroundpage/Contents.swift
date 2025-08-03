@@ -68,8 +68,9 @@ let emptyArray = [Int]()
 let numbers: [Int] = [2,3,6,8,10]
 let oddNumbers: [Int] = [1,3,5]
 
-let result = evenNumbers(in: oddNumbers)
+let result = evenNumbers(in: oddNumbers)  // run with different arrays
 
+// switch on result
 switch result {
 case .success(let array):
   print(array)
@@ -77,6 +78,7 @@ case .failure(let error):
   print("Array is empty")
 }
 
+// try result.get()
 do {
   let array = try result.get()
   print(array)
@@ -84,7 +86,7 @@ do {
   print(error)
 }
 
-// Paul Hudson: Task.result
+// Hacking With Swift: Task.result
 func fetchReadings() async {
   let fetchTask = Task {
     let url = URL(string: "https://hws.dev/readings.json")!
