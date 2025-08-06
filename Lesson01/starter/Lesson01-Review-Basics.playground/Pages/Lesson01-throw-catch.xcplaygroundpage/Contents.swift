@@ -75,7 +75,7 @@ class Bakery {
 let bakery = Bakery()
 // TODO: In a do closure, try open and orderPastry
 bakery.open()
-bakery.orderPastry(item: "Cookie", amountRequested: 1, flavor: "ChocolateChip")
+bakery.orderPastry(item: "Cookie", amountRequested: 1, flavor: "Butter")
 
 // TODO: In catch closures, handle BakeryError and other errors
 
@@ -106,7 +106,7 @@ bakery.orderPastry(item: "Cookie", amountRequested: 1, flavor: "ChocolateChip")
 // This has the same effect as:
 //do {
 //  try bakery.open(true)
-//  try bakery.orderPastry(item: "Cookie", amountRequested: 1, flavor: "ChocolateChip")
+//  try bakery.orderPastry(item: "Cookie", amountRequested: 1, flavor: "Butter")
 //}
 //catch {
 //  fatalError()

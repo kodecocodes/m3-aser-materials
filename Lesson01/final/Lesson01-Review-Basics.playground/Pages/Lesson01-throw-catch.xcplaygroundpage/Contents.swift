@@ -81,8 +81,8 @@ class Bakery {
 let bakery = Bakery()
 
 do {
-  try bakery.open()
-  try bakery.orderPastry(item: "Cookie", amountRequested: 1, flavor: "ChocolateChip")
+  try bakery.open(true)
+  try bakery.orderPastry(item: "Cookie", amountRequested: 1, flavor: "Butter")
 }
 // Handle each BakeryError
 catch let error as BakeryError {
@@ -103,7 +103,7 @@ catch {
 }
 
 do {
-  try bakery.open()
+  try bakery.open(true)
   try bakery.orderPastry(item: "Albatross", amountRequested: 1, flavor: "AlbatrossFlavor")
 }
 // Another way to handle every error
@@ -125,12 +125,12 @@ let remaining = try? bakery.orderPastry(item: "Albatross", amountRequested: 1, f
 
 // If you know for sure that your code is not going to fail, use try!
 try! bakery.open(true)
-try! bakery.orderPastry(item: "Cookie", amountRequested: 1, flavor: "ChocolateChip")
+try! bakery.orderPastry(item: "Cookie", amountRequested: 1, flavor: "Butter")
 
 // This has the same effect as:
 do {
   try bakery.open(true)
-  try bakery.orderPastry(item: "Cookie", amountRequested: 1, flavor: "ChocolateChip")
+  try bakery.orderPastry(item: "Cookie", amountRequested: 1, flavor: "Butter")
 }
 catch {
   fatalError()
