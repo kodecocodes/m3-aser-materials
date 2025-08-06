@@ -36,7 +36,7 @@ enum EvenNumberError: Error {
   case emptyArray
 }
 
-// throwing function
+// Function returns [Int], throws EvenNumberError
 func evenNumbersThrow(in collection: [Int]) throws(EvenNumberError) -> [Int] {
   guard !collection.isEmpty else { throw .emptyArray }
   let evenNumbers = collection.filter { number in number % 2 == 0 }
@@ -47,42 +47,23 @@ func evenNumbersThrow(in collection: [Int]) throws(EvenNumberError) -> [Int] {
   }
 }
 
-// Basic use of Result: Function that returns Result type
-func evenNumbers(in collection: [Int]) -> Result<[Int], EvenNumberError> {
-  guard !collection.isEmpty else {
-    return .failure(.emptyArray)
-  }
-  
-  let evenNumbers = collection.filter { number in number % 2 == 0 }
-  
-  if evenNumbers.isEmpty {
-    return .failure(.emptyArray)
-  } else {
-    return .success(evenNumbers)
-  }
+// TODO: Function returns Result<[Int], EvenNumberError>
+func evenNumbers(in collection: [Int]) {
+
 }
 
 let emptyArray = [Int]()
 let numbers: [Int] = [2,3,6,8,10]
 let oddNumbers: [Int] = [1,3,5]
 
-let result = evenNumbers(in: oddNumbers)  // run with different arrays
+// TODO: Run evenNumbers with different arrays
 
-// switch on result
-switch result {
-case .success(let array):
-  print(array)
-case .failure(let error):
-  print("Array is empty")
-}
 
-// try result.get()
-do {
-  let array = try result.get()
-  print(array)
-} catch {
-  print(error)
-}
+// TODO: switch on result
+
+
+// TODO: try result.get()
+
 
 // Hacking With Swift: Task.result
 func fetchReadings() async {
@@ -94,20 +75,11 @@ func fetchReadings() async {
   }
   let result = await fetchTask.result  // Note: don't need try
 
-  // try result.get()
-  do {
-    let output = try result.get()
-  } catch {
-    let output = "Error: \(error.localizedDescription)"
-  }
+  // TODO: try result.get()
 
-  // switch on result
-  switch result {
-  case .success(let str):
-    let output = str
-  case .failure(let error):
-    let output = "Error: \(error.localizedDescription)"
-  }
+
+  // TODO: switch on result
+
 }
 
 //: [Next](@next)

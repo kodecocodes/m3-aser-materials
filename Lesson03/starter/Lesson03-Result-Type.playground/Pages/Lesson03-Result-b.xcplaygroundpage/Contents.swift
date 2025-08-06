@@ -55,7 +55,7 @@ enum BakeryError: Error {
 class Bakery {
   let itemsForSale = [
     "Cookie": Pastry(flavor: "ChocolateChip", numberOnHand: 20),
-    "PopTart": Pastry(flavor: "WildBerry", numberOnHand: 0),  // guaranteed error
+    "PopTart": Pastry(flavor: "WildBerry", numberOnHand: 12),  // TODO: guarantee error
     "Donut" : Pastry(flavor: "Sprinkles", numberOnHand: 24),
     "HandPie": Pastry(flavor: "Cherry", numberOnHand: 6)
   ]
@@ -78,17 +78,16 @@ class Bakery {
 
 // Use Result initializer init(catching:)
 let bakery = Bakery()
-var results = [Result<Int, Error>]()
+// TODO: Create an empty array of Result<Int, Error>
+
 
 for (key, value) in bakery.itemsForSale {
-  // Invoke throwing expression in closure passed to init(catching:)
+  // TODO: Invoke throwing expression in closure passed to init(catching:)
   let result = Result {
-    try bakery.orderPastry(
-      item: key,
-      amountRequested: 1,
-      flavor: value.flavor)
+
   }
-  results.append(result)
+  // TODO: Append result to results
+
 }
 
 //: [Next](@next)

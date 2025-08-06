@@ -36,7 +36,7 @@ enum EvenNumberError: Error {
   case emptyArray
 }
 
-// throwing function
+// Function returns [Int], throws EvenNumberError
 func evenNumbersThrow(in collection: [Int]) throws(EvenNumberError) -> [Int] {
   guard !collection.isEmpty else { throw .emptyArray }
   let evenNumbers = collection.filter { number in number % 2 == 0 }
@@ -47,7 +47,7 @@ func evenNumbersThrow(in collection: [Int]) throws(EvenNumberError) -> [Int] {
   }
 }
 
-// Basic use of Result: Function that returns Result type
+// Function returns Result<[Int], EvenNumberError>
 func evenNumbers(in collection: [Int]) -> Result<[Int], EvenNumberError> {
   guard !collection.isEmpty else {
     return .failure(.emptyArray)
