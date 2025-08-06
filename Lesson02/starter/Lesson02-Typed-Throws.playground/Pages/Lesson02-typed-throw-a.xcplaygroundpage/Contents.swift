@@ -54,24 +54,24 @@ class Bakery {
     "HandPie": Pastry(flavor: "Cherry", numberOnHand: 6)
   ]
   
-  // Method throws only BakeryError
-  func open(_ shouldOpen: Bool = Bool.random()) throws(BakeryError) -> Bool {
+  // TODO: Method throws only BakeryError
+  func open(_ shouldOpen: Bool = Bool.random()) throws -> Bool {
     guard shouldOpen else {
-      throw Bool.random() ? .noInventory : .noPower
+      throw Bool.random() ? BakeryError.noInventory : BakeryError.noPower
     }
     return shouldOpen
   }
     
-  // Method throws only BakeryError
-  func orderPastry(item: String, amountRequested: Int, flavor: String) throws(BakeryError) -> Int {
+  // TODO: Method throws only BakeryError
+  func orderPastry(item: String, amountRequested: Int, flavor: String) throws -> Int {
     guard let pastry = itemsForSale[item] else {
-      throw .noSuchItem
+      throw BakeryError.noSuchItem
     }
     guard flavor == pastry.flavor else {
-      throw .wrongFlavor
+      throw BakeryError.wrongFlavor
     }
     guard amountRequested <= pastry.numberOnHand else {
-      throw .tooFew(numberOnHand: pastry.numberOnHand)
+      throw BakeryError.tooFew(numberOnHand: pastry.numberOnHand)
     }
     pastry.numberOnHand -= amountRequested
         
@@ -80,46 +80,27 @@ class Bakery {
 }
 
 let bakery = Bakery()
-  
-// catch doesn't need to specify BakeryError
+
 do {
   try bakery.open()
   try bakery.orderPastry(item: "Cookie", amountRequested: 1, flavor: "ChocolateChip")
 }
-// Handle each BakeryError
-catch let error {  // error is type BakeryError
+// TODO: catch doesn't need to specify BakeryError
+catch let error as BakeryError {
   switch error {
-  case .noInventory, .noPower:
+  case BakeryError.noInventory, BakeryError.noPower:
     print("Sorry, the bakery is now closed.")
-  case .noSuchItem:
+  case BakeryError.noSuchItem:
     print("Sorry, but we don't sell this item.")
-  case .wrongFlavor:
+  case BakeryError.wrongFlavor:
     print("Sorry, but we don't carry this flavor.")
-  case .tooFew(numberOnHand: let items):
+  case BakeryError.tooFew(numberOnHand: let items):
     print("We only have \(items) cookies left.")
   }
 }
-// No other type of error is possible, so compiler warns "Case will never be executed"
-//catch {
-//  print("Something went wrong: \(error)")
-//}
-
-do {
-  try bakery.open()
-  try bakery.orderPastry(item: "Albatross", amountRequested: 1, flavor: "AlbatrossFlavor")
-}
-// Another way to handle every error
-catch .noInventory, .noPower {
-  print("Sorry, the bakery is now closed.")
-} catch .noSuchItem {
-  print("Sorry, but we don't sell this item.")
-} catch .wrongFlavor {
-  print("Sorry, but we don't carry this flavor.")
-} catch .tooFew(numberOnHand: let items) {
-  print("We only have \(items) cookies left.")
-// No other type of error is possible, so compiler warns "Case will never be executed"
-//} catch {
-//  print("Some other error.")
+// TODO: No other errors to catch
+catch {
+  print("Something went wrong: \(error)")
 }
 
 //: [Next](@next)

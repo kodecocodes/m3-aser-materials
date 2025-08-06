@@ -47,22 +47,6 @@ enum AuthError: Error {
   case tokenExpired
 }
 
-func performNetworkRequest() throws(NetworkError) {
-  throw .disconnected
-}
-
-do {
-  try performNetworkRequest()
-} catch .disconnected {
-  print("You are not connected to the internet.")
-} catch .timeout(let seconds) {
-  print("The request timed out after \(seconds) seconds.")
-} catch .httpError(let statusCode) {
-  print("HTTP Error with status code: \(statusCode).")
-} catch {  // never happens
-  print("An unexpected error occurred.")
-}
-
 // Not allowed: function can throw at most one Error type
 //func loadData() throws(NetworkError, AuthError) {  // Consecutive statements on a line...
 func loadData() throws {
