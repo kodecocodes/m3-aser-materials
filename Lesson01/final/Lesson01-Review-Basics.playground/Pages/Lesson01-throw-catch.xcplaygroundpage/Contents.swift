@@ -43,8 +43,8 @@ class Pastry {
 }
 
 enum BakeryError: Error {
-  case tooFew(numberOnHand: Int), noSuchItem, wrongFlavor
   case noInventory, noPower
+  case tooFew(numberOnHand: Int), noSuchItem, wrongFlavor
 }
 
 class Bakery {
