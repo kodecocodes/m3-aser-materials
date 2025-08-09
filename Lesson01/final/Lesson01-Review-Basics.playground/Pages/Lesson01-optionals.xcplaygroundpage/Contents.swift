@@ -62,7 +62,7 @@ let nopeHouse = PetHouse(squareFeetAsString: "nope")
 
 // Optional chaining
 /*
- A lot of Kodeco team members own pets — but not all. Some pets have a favorite toy, and others don’t. Some of these toys make noise, and others don’t.
+ Many people own pets — but not all. Some pets have a favorite toy, and others don’t. Some of these toys make noise, and others don’t.
  */
 class Toy {
     
